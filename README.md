@@ -14,7 +14,11 @@ HTML, CSS, and plain JavaScript.
 
 ## Deployment
 
-Vercel URL: pending deployment. Deploy this folder as an independent static project with `index.html` at the project root.
+GitHub: https://github.com/Adarshcod/access-denied-inaccessible
+
+Live: https://access-denied-inaccessible.vercel.app
+
+This is an independent Vercel static project with `index.html` at its root.
 
 ## Facilitator
 
