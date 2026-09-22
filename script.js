@@ -8,26 +8,17 @@
   const comparison = $('#comparison');
   const details = $('#event-details');
   const registration = $('#registration-form');
-  const search = $('#event-search');
-  const filter = $('#event-filter');
-  const cards = $$('.event-card');
-  const noResults = $('#no-results');
-  const searchStatus = $('#search-status');
+  const review = $('#registration-review');
+  const reviewButton = $('#review-button');
+  const finalButton = $('#final-register');
+  const formControls = $$('#registration-form .form-grid input, #registration-form .form-grid select');
   const minimumReviewMs = 301000;
-  const challengeStartKey = 'access-denied-inaccessible-start';
   let challengeStartedAt = null;
-  let completionTimer = null;
+  let reviewTimer = null;
+  let reviewing = false;
 
   function beginChallenge() {
-    if (challengeStartedAt !== null) return;
-    try {
-      const saved = Number(sessionStorage.getItem(challengeStartKey));
-      if (Number.isFinite(saved) && saved > 0 && saved <= Date.now()) challengeStartedAt = saved;
-    } catch { /* The timer still works when session storage is unavailable. */ }
-    if (challengeStartedAt === null) {
-      challengeStartedAt = Date.now();
-      try { sessionStorage.setItem(challengeStartKey, String(challengeStartedAt)); } catch { /* Continue without persistence. */ }
-    }
+    if (challengeStartedAt === null) challengeStartedAt = performance.now();
   }
 
   function showStage(stage, heading) {
@@ -40,20 +31,6 @@
     $$('.sidebar a').forEach((item) => item.removeAttribute('aria-current'));
     link.setAttribute('aria-current', 'page');
   }));
-
-  function updateEvents() {
-    const term = search.value.trim().toLowerCase();
-    let count = 0;
-    cards.forEach((card) => {
-      const matches = card.dataset.event.includes(term) && (filter.value === 'all' || card.dataset.category === filter.value);
-      card.hidden = !matches;
-      if (matches) count++;
-    });
-    noResults.hidden = count !== 0;
-    if (searchStatus) searchStatus.textContent = `${count} event${count === 1 ? '' : 's'} shown`;
-  }
-  search.addEventListener('input', updateEvents);
-  filter.addEventListener('change', updateEvents);
 
   $('#details-button').addEventListener('click', (event) => {
     beginChallenge();
@@ -70,9 +47,9 @@
     { id: 'department', message: 'Select your department.', valid: (el) => !!el.value },
     { id: 'year', message: 'Select your year of study.', valid: (el) => !!el.value },
     { id: 'participation', message: 'Choose Individual or Team of 2.', valid: () => !!registration.querySelector('input[name="participation"]:checked') },
-    { id: 'event-title', message: 'Enter ACCESS DENIED as the event name.', valid: (el) => el.value.trim().replace(/\s+/g, ' ').toUpperCase() === 'ACCESS DENIED' },
-    { id: 'event-date', message: 'Select 23 September 2026.', valid: (el) => el.value === '2026-09-23' },
-    { id: 'event-venue', message: 'Select University Computer Lab.', valid: (el) => el.value === 'University Computer Lab' }
+    { id: 'event-venue', message: 'Select University Computer Lab.', valid: (el) => el.value === 'University Computer Lab' },
+    { id: 'event-time', message: 'Select 2:00 PM.', valid: (el) => el.value === '2:00 PM' },
+    { id: 'event-reference', message: 'Enter CC-AD-2309 from the event listing.', valid: (el) => el.value.trim().toUpperCase() === 'CC-AD-2309' }
   ];
   function clearError(field) {
     const error = $(`#${field.id}-error`);
@@ -105,33 +82,60 @@
     }
     return false;
   }
+  function updateReviewAvailability() {
+    const remaining = Math.max(0, challengeStartedAt + minimumReviewMs - performance.now());
+    finalButton.disabled = remaining > 0;
+    if (remaining > 0) {
+      const seconds = Math.ceil(remaining / 1000);
+      $('#review-timer').textContent = `Final submission available in ${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}.`;
+    } else {
+      $('#review-timer').textContent = 'Final submission is available.';
+      if (reviewTimer !== null) clearInterval(reviewTimer);
+      reviewTimer = null;
+    }
+  }
+  function editRegistration() {
+    if (reviewTimer !== null) clearInterval(reviewTimer);
+    reviewTimer = null;
+    reviewing = false;
+    formControls.forEach((control) => { control.disabled = false; });
+    review.hidden = true;
+    reviewButton.hidden = false;
+    reviewButton.focus();
+  }
   registration.addEventListener('submit', (event) => {
     event.preventDefault();
-    if (completionTimer !== null) return;
-    if (!validate()) return;
+    if (reviewing || !validate()) return;
     beginChallenge();
-    const pending = $('#registration-pending');
-    const countdown = $('#registration-countdown');
-    const submit = registration.querySelector('[type="submit"]');
-    submit.disabled = true;
-    pending.hidden = false;
-    const finish = () => {
-      if (completionTimer !== null) clearInterval(completionTimer);
-      completionTimer = null;
-      try { sessionStorage.removeItem(challengeStartKey); } catch { /* Storage may be unavailable. */ }
-      registration.reset();
-      submit.disabled = false;
-      pending.hidden = true;
-      showStage(confirmation, $('#confirmation-title'));
-    };
-    const updateCountdown = () => {
-      const remaining = Math.max(0, challengeStartedAt + minimumReviewMs - Date.now());
-      if (remaining === 0) { finish(); return; }
-      const seconds = Math.ceil(remaining / 1000);
-      countdown.textContent = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
-    };
-    updateCountdown();
-    if (!pending.hidden) completionTimer = setInterval(updateCountdown, 1000);
+    $('#review-name').textContent = $('#full-name').value.trim();
+    $('#review-email').textContent = $('#email').value.trim();
+    $('#review-participation').textContent = registration.querySelector('input[name="participation"]:checked').value;
+    $('#review-event').textContent = '2:00 PM · University Computer Lab · CC-AD-2309';
+    formControls.forEach((control) => { control.disabled = true; });
+    reviewing = true;
+    reviewButton.hidden = true;
+    review.hidden = false;
+    updateReviewAvailability();
+    if (finalButton.disabled) reviewTimer = setInterval(updateReviewAvailability, 1000);
+    review.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  });
+  $('#edit-registration').addEventListener('click', editRegistration);
+  finalButton.addEventListener('click', () => {
+    if (!reviewing || challengeStartedAt === null || performance.now() < challengeStartedAt + minimumReviewMs) {
+      updateReviewAvailability();
+      return;
+    }
+    if (!validate()) { editRegistration(); return; }
+    if (reviewTimer !== null) clearInterval(reviewTimer);
+    reviewTimer = null;
+    registration.reset();
+    challengeStartedAt = null;
+    reviewing = false;
+    formControls.forEach((control) => { control.disabled = false; });
+    review.hidden = true;
+    reviewButton.hidden = false;
+    finalButton.disabled = true;
+    showStage(confirmation, $('#confirmation-title'));
   });
   if (accessible) {
     fields.forEach((field) => {
