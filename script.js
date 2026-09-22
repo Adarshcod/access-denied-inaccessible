@@ -13,6 +13,22 @@
   const cards = $$('.event-card');
   const noResults = $('#no-results');
   const searchStatus = $('#search-status');
+  const minimumReviewMs = 301000;
+  const challengeStartKey = 'access-denied-inaccessible-start';
+  let challengeStartedAt = null;
+  let completionTimer = null;
+
+  function beginChallenge() {
+    if (challengeStartedAt !== null) return;
+    try {
+      const saved = Number(sessionStorage.getItem(challengeStartKey));
+      if (Number.isFinite(saved) && saved > 0 && saved <= Date.now()) challengeStartedAt = saved;
+    } catch { /* The timer still works when session storage is unavailable. */ }
+    if (challengeStartedAt === null) {
+      challengeStartedAt = Date.now();
+      try { sessionStorage.setItem(challengeStartKey, String(challengeStartedAt)); } catch { /* Continue without persistence. */ }
+    }
+  }
 
   function showStage(stage, heading) {
     [dashboard, confirmation, reflection, comparison].forEach((item) => { item.hidden = item !== stage; });
@@ -40,6 +56,7 @@
   filter.addEventListener('change', updateEvents);
 
   $('#details-button').addEventListener('click', (event) => {
+    beginChallenge();
     details.hidden = false;
     event.currentTarget.setAttribute('aria-expanded', 'true');
     details.scrollIntoView({ block: 'start', behavior: 'smooth' });
@@ -86,9 +103,31 @@
   }
   registration.addEventListener('submit', (event) => {
     event.preventDefault();
+    if (completionTimer !== null) return;
     if (!validate()) return;
-    registration.reset();
-    showStage(confirmation, $('#confirmation-title'));
+    beginChallenge();
+    const pending = $('#registration-pending');
+    const countdown = $('#registration-countdown');
+    const submit = registration.querySelector('[type="submit"]');
+    submit.disabled = true;
+    pending.hidden = false;
+    const finish = () => {
+      if (completionTimer !== null) clearInterval(completionTimer);
+      completionTimer = null;
+      try { sessionStorage.removeItem(challengeStartKey); } catch { /* Storage may be unavailable. */ }
+      registration.reset();
+      submit.disabled = false;
+      pending.hidden = true;
+      showStage(confirmation, $('#confirmation-title'));
+    };
+    const updateCountdown = () => {
+      const remaining = Math.max(0, challengeStartedAt + minimumReviewMs - Date.now());
+      if (remaining === 0) { finish(); return; }
+      const seconds = Math.ceil(remaining / 1000);
+      countdown.textContent = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
+    };
+    updateCountdown();
+    if (!pending.hidden) completionTimer = setInterval(updateCountdown, 1000);
   });
   if (accessible) {
     fields.forEach((field) => {

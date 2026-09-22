@@ -4,6 +4,8 @@ An offline, client-side student portal for the **ACCESS DENIED** Computer Club c
 
 This version intentionally reproduces common visual accessibility barriers found in real portals. It remains functional so participants can complete the same task as in the accessible version. The barrier details are documented here for facilitators, not revealed during the participant task. The registration is a simulation: it validates in the browser and does not send or store personal details. Reflections are saved in this browser session only.
 
+The event appears below four other campus listings. Opening its details starts a five-minute-and-one-second minimum review period. A valid registration submitted earlier stays pending with a countdown and completes automatically after that period. The start time survives a refresh in the same browser tab and is cleared when registration completes. This is a client-side event timing rule, not a real accessibility barrier or a secure time guarantee: browser tools, a changed device clock, or a previously started tab can bypass it. For each new participant, open a fresh tab or close the previous one.
+
 ## Run locally
 
 Open `index.html` directly, or serve this folder with any static HTTP server, for example `python -m http.server 8000`, then visit `http://localhost:8000`. No build step or dependencies are required. The site works offline.
