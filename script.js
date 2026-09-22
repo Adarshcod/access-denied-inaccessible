@@ -66,9 +66,13 @@
   const fields = [
     { id: 'full-name', message: 'Enter your full name (at least 2 characters).', valid: (el) => el.value.trim().length >= 2 },
     { id: 'email', message: 'Enter a valid email address, such as name@example.com.', valid: (el) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value.trim()) },
+    { id: 'confirm-email', message: 'Enter the same email address again.', valid: (el) => el.value.trim().toLowerCase() === $('#email').value.trim().toLowerCase() },
     { id: 'department', message: 'Select your department.', valid: (el) => !!el.value },
     { id: 'year', message: 'Select your year of study.', valid: (el) => !!el.value },
-    { id: 'participation', message: 'Choose Individual or Team of 2.', valid: () => !!registration.querySelector('input[name="participation"]:checked') }
+    { id: 'participation', message: 'Choose Individual or Team of 2.', valid: () => !!registration.querySelector('input[name="participation"]:checked') },
+    { id: 'event-title', message: 'Enter ACCESS DENIED as the event name.', valid: (el) => el.value.trim().replace(/\s+/g, ' ').toUpperCase() === 'ACCESS DENIED' },
+    { id: 'event-date', message: 'Select 23 September 2026.', valid: (el) => el.value === '2026-09-23' },
+    { id: 'event-venue', message: 'Select University Computer Lab.', valid: (el) => el.value === 'University Computer Lab' }
   ];
   function clearError(field) {
     const error = $(`#${field.id}-error`);

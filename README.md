@@ -6,6 +6,8 @@ This version intentionally reproduces common visual accessibility barriers found
 
 The event appears below four other campus listings. Opening its details starts a five-minute-and-one-second minimum review period. A valid registration submitted earlier stays pending with a countdown and completes automatically after that period. The start time survives a refresh in the same browser tab and is cleared when registration completes. This is a client-side event timing rule, not a real accessibility barrier or a secure time guarantee: browser tools, a changed device clock, or a previously started tab can bypass it. For each new participant, open a fresh tab or close the previous one.
 
+The form also asks participants to re-enter their email and match the event name, date, and venue shown above the form. Wrong answers receive the same vague validation message as the original fields. These extra checks add task friction; they are not a model for a real registration form. No entered registration details are sent or stored.
+
 ## Run locally
 
 Open `index.html` directly, or serve this folder with any static HTTP server, for example `python -m http.server 8000`, then visit `http://localhost:8000`. No build step or dependencies are required. The site works offline.
