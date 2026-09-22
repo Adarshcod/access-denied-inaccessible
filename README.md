@@ -6,7 +6,7 @@ This version intentionally reproduces common visual accessibility barriers found
 
 The event appears below four other campus listings, with no event search or category filter, no visual highlight, and a vague **More** action. Opening its details starts a five-minute-and-one-second minimum review period. A valid form advances to a review step, but the final **Submit registration** button stays disabled until the period ends; no registration is submitted automatically. A page refresh starts a new timed attempt, so a previous participant's countdown cannot carry over. This is a client-side event timing rule, not a real accessibility barrier or a secure time guarantee: browser tools can still alter it.
 
-The form asks participants to re-enter their email and match the venue, start time, and reference shown elsewhere on the page. It does not ask for the event name or date. Wrong answers receive the same vague validation message as the original fields. These extra checks add task friction; they are not a model for a real registration form. No entered registration details are sent or stored.
+The form asks participants to re-enter their email and match the venue and start time shown elsewhere on the page. It does not ask for the event name, date, or reference. Wrong answers receive the same vague validation message as the original fields. These extra checks add task friction; they are not a model for a real registration form. No entered registration details are sent or stored.
 
 ## Run locally
 

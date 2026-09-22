@@ -48,8 +48,7 @@
     { id: 'year', message: 'Select your year of study.', valid: (el) => !!el.value },
     { id: 'participation', message: 'Choose Individual or Team of 2.', valid: () => !!registration.querySelector('input[name="participation"]:checked') },
     { id: 'event-venue', message: 'Select University Computer Lab.', valid: (el) => el.value === 'University Computer Lab' },
-    { id: 'event-time', message: 'Select 2:00 PM.', valid: (el) => el.value === '2:00 PM' },
-    { id: 'event-reference', message: 'Enter CC-AD-2309 from the event listing.', valid: (el) => el.value.trim().toUpperCase() === 'CC-AD-2309' }
+    { id: 'event-time', message: 'Select 2:00 PM.', valid: (el) => el.value === '2:00 PM' }
   ];
   function clearError(field) {
     const error = $(`#${field.id}-error`);
@@ -110,7 +109,7 @@
     $('#review-name').textContent = $('#full-name').value.trim();
     $('#review-email').textContent = $('#email').value.trim();
     $('#review-participation').textContent = registration.querySelector('input[name="participation"]:checked').value;
-    $('#review-event').textContent = '2:00 PM · University Computer Lab · CC-AD-2309';
+    $('#review-event').textContent = '2:00 PM · University Computer Lab';
     formControls.forEach((control) => { control.disabled = true; });
     reviewing = true;
     reviewButton.hidden = true;
