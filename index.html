@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10243a">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <title>Student Portal | Shobhit Institute of Engineering & Technology</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body data-version="Inaccessible">
+  
+  <div class="site-shell">
+    <header class="topbar">
+      <div class="brand-mark" aria-hidden="true">SI</div>
+      <div class="brand-copy"><strong>Shobhit Institute of Engineering & Technology</strong><span>Student portal</span></div>
+      <div class="header-right"><span class="term">Academic year 2026–27</span><span class="avatar" aria-hidden="true">ST</span></div>
+    </header>
+    <div class="layout">
+      <nav class="sidebar" aria-label="Student portal">
+        <div class="nav-heading">WORKSPACE</div>
+        <a href="#dashboard" aria-current="page">Dashboard</a>
+        <a href="#events">Events</a>
+        <a href="#notices">Notices</a>
+        <div class="sidebar-foot">Computer Club<br><span>Campus activities</span></div>
+      </nav>
+      <main id="main">
+        <div id="dashboard" class="dashboard-stage">
+          <div class="page-intro"><div><p class="eyebrow">STUDENT DASHBOARD</p><h1>Good afternoon, student</h1><p>Explore campus updates and upcoming events.</p></div><span class="date-pill">Wednesday, 23 September 2026</span></div>
+          <section class="task-banner" aria-labelledby="task-title"><div class="task-icon" aria-hidden="true">↗</div><div><h2 id="task-title">YOUR TASK</h2><p>Find the upcoming Computer Club event and register.</p></div></section>
+          <div class="content-grid">
+            <div class="primary-column">
+              <section id="events" class="panel" aria-labelledby="events-title">
+                <div class="section-heading"><div><p class="eyebrow">CAMPUS LIFE</p><h2 id="events-title">Upcoming events</h2></div><span class="count">3 events</span></div>
+                <div class="filters"><label for="event-search">Search events</label><div class="filter-row"><input id="event-search" type="search" placeholder="Search by name or organizer"><label for="event-filter">Show</label><select id="event-filter"><option value="all">All events</option><option value="clubs">Club events</option><option value="academic">Academic events</option></select></div></div>
+                <p id="search-status" class="sr-only" role="status"></p>
+                <div class="event-list">
+                  <article class="event-card featured" data-event="access denied computer club digital accessibility" data-category="clubs">
+                    <div class="event-date"><strong>23</strong><span>SEP</span></div><div class="event-copy"><div class="event-topline"><span class="club-tag">COMPUTER CLUB</span><span class="status"><span class="status-dot" aria-hidden="true"></span>Registration open</span></div><h3>ACCESS DENIED</h3><p>An interactive technology experience exploring digital accessibility and inclusive technology.</p><div class="event-meta"><span>2:00 PM</span><span>University Computer Lab</span></div><button class="text-action" type="button" id="details-button" aria-expanded="false" aria-controls="event-details">View event details <span aria-hidden="true">→</span></button></div>
+                  </article>
+                  <article class="event-card" data-event="research poster showcase academic" data-category="academic"><div class="event-date"><strong>29</strong><span>SEP</span></div><div class="event-copy"><div class="event-topline"><span class="club-tag muted">ACADEMIC</span><span class="status">Registration open</span></div><h3>Research Poster Showcase</h3><p>Student research presentations from across departments.</p><div class="event-meta"><span>11:00 AM</span><span>Seminar Hall</span></div></div></article>
+                  <article class="event-card" data-event="campus coding circle computer club" data-category="clubs"><div class="event-date"><strong>03</strong><span>OCT</span></div><div class="event-copy"><div class="event-topline"><span class="club-tag">COMPUTER CLUB</span><span class="status">Registration open</span></div><h3>Campus Coding Circle</h3><p>An informal peer session for programming practice.</p><div class="event-meta"><span>4:00 PM</span><span>Innovation Studio</span></div></div></article>
+                </div>
+                <p id="no-results" hidden>No events match your search. Try another name or choose All events.</p>
+              </section>
+              <section id="event-details" class="panel detail-panel" aria-labelledby="detail-title" hidden>
+                <div class="section-heading"><div><p class="eyebrow">EVENT DETAILS</p><h2 id="detail-title" tabindex="-1">ACCESS DENIED</h2></div><span class="status"><span class="status-dot" aria-hidden="true"></span>Registration open</span></div>
+                <p>An interactive technology experience exploring digital accessibility and inclusive technology.</p>
+                <dl class="detail-grid"><div><dt>Date</dt><dd>23 September 2026</dd></div><div><dt>Time</dt><dd>2:00 PM</dd></div><div><dt>Venue</dt><dd>University Computer Lab</dd></div><div><dt>Participation</dt><dd>Individual or Team of 2</dd></div><div><dt>Participation fee</dt><dd>Free</dd></div><div><dt>Organizer</dt><dd>Computer Club<br>Shobhit Institute of Engineering & Technology</dd></div></dl>
+                <form id="registration-form" novalidate><div class="form-heading"><h3>Register for this event</h3><p>All fields are required.</p></div><div id="form-errors" class="error-summary" role="alert" tabindex="-1" hidden></div><div class="form-grid"><div class="field"><label class="quiet-label" for="full-name">Full name</label><input placeholder="Full name" id="full-name" name="fullName" autocomplete="name" required><span class="field-error" id="full-name-error"></span></div><div class="field"><label class="quiet-label" for="email">Email</label><input placeholder="Email" id="email" name="email" type="email" autocomplete="email" required><span class="field-error" id="email-error"></span></div><div class="field"><label for="department">Department</label><select id="department" name="department" required><option value="">Select department</option><option>Computer Science & Engineering</option><option>Electronics & Communication Engineering</option><option>Mechanical Engineering</option><option>Civil Engineering</option><option>Other</option></select><span class="field-error" id="department-error"></span></div><div class="field"><label for="year">Year</label><select id="year" name="year" required><option value="">Select year</option><option>1st year</option><option>2nd year</option><option>3rd year</option><option>4th year</option><option>Postgraduate</option></select><span class="field-error" id="year-error"></span></div><fieldset class="field full-width"><legend>Participation type</legend><div class="radio-row"><label><input type="radio" name="participation" value="Individual"> Individual</label><label><input type="radio" name="participation" value="Team of 2"> Team of 2</label></div><span class="field-error" id="participation-error"></span></fieldset></div><button class="primary-button" type="submit">REGISTER NOW</button><p class="privacy-note">This demonstration stores no registration data.</p></form>
+              </section>
+            </div>
+            <aside class="secondary-column" aria-label="Student information"><section class="panel profile-card" aria-labelledby="profile-title"><p class="eyebrow">STUDENT PROFILE</p><div class="profile-line"><span class="profile-avatar" aria-hidden="true">ST</span><div><h2 id="profile-title">Student account</h2><p>Campus participant</p></div></div><div class="profile-extra"><span>Portal access</span><strong>Active</strong></div></section><section id="notices" class="panel notice-card" aria-labelledby="notices-title"><p class="eyebrow">UPDATES</p><h2 id="notices-title">Important notices</h2><ul><li><strong>Event registration</strong><span>Check event details before submitting your registration.</span></li><li><strong>Campus lab access</strong><span>Bring your student ID to events held in the computer lab.</span></li></ul></section></aside>
+          </div>
+        </div>
+        <section id="confirmation" class="stage-card" aria-labelledby="confirmation-title" hidden><div class="success-icon" aria-hidden="true">✓</div><p class="eyebrow">EVENT REGISTRATION</p><h1 id="confirmation-title" tabindex="-1">Registration Successful</h1><p>You completed the task.</p><button id="continue-button" class="primary-button" type="button">CONTINUE</button><button class="secondary-button comparison-trigger" type="button">VIEW ACCESSIBILITY COMPARISON</button></section>
+        <section id="reflection" class="stage-card reflection" aria-labelledby="reflection-title" hidden><p class="eyebrow">AFTER THE CHALLENGE</p><h1 id="reflection-title" tabindex="-1">REFLECT</h1><p>Think about your experience with both portal versions. Your notes stay on this device.</p><form id="reflection-form"><div class="field"><label for="reflection-1">1. What made the first version difficult?</label><textarea id="reflection-1" rows="3"></textarea></div><div class="field"><label for="reflection-2">2. Which parts of the interface created barriers?</label><textarea id="reflection-2" rows="3"></textarea></div><div class="field"><label for="reflection-3">3. What changed in the accessible version?</label><textarea id="reflection-3" rows="3"></textarea></div><div class="field"><label for="reflection-4">4. Which accessibility improvement made the biggest difference?</label><textarea id="reflection-4" rows="3"></textarea></div><div class="field"><label for="reflection-5">5. If you were building this system for a visually impaired student, what would you change?</label><textarea id="reflection-5" rows="3"></textarea></div><button type="submit" class="secondary-button">Save my reflections</button><p id="reflection-status" role="status"></p></form><button class="primary-button comparison-trigger" type="button">VIEW ACCESSIBILITY COMPARISON</button></section>
+        <section id="comparison" class="stage-card comparison" aria-labelledby="comparison-title" hidden><p class="eyebrow">DESIGN COMPARISON</p><h1 id="comparison-title" tabindex="-1">Accessibility comparison</h1><div class="comparison-head"><span>INACCESSIBLE DESIGN</span><span aria-hidden="true">vs.</span><span>ACCESSIBLE DESIGN</span></div><div class="comparison-rows"><div><span>Poor contrast</span><span>High contrast</span></div><div><span>Small text</span><span>Readable typography</span></div><div><span>Unclear labels</span><span>Clear labels</span></div><div><span>Color-only information</span><span>Text + visual information</span></div><div><span>Weak focus</span><span>Visible keyboard focus</span></div><div><span>Poor hierarchy</span><span>Clear information hierarchy</span></div><div><span>Small controls</span><span>Comfortable controls</span></div><div><span>Vague errors</span><span>Descriptive errors</span></div></div><p class="takeaway">The problem isn't always the person.<br>Sometimes, it's the technology.</p><button id="back-reflection" class="secondary-button" type="button">Back to reflection</button></section>
+      </main>
+    </div>
+    <footer>© 2026 Shobhit Institute of Engineering & Technology · Computer Club</footer>
+  </div>
+  <div id="facilitator" class="facilitator-backdrop" hidden><section class="facilitator-panel" role="dialog" aria-modal="true" aria-labelledby="facilitator-title"><button id="close-facilitator" class="close-button" type="button" aria-label="Close facilitator mode">×</button><p class="eyebrow">STAFF VIEW</p><h2 id="facilitator-title">FACILITATOR MODE</h2><p><strong>VERSION:</strong> <span id="facilitator-version">Inaccessible</span></p><h3>KEY ACCESSIBILITY BARRIERS</h3><ul><li>Low contrast</li><li>Small typography</li><li>Color dependency</li><li>Poor form labels</li><li>Weak focus indicators</li><li>Poor information hierarchy</li><li>Dense content</li><li>Unclear error messages</li></ul><p>This paired experience helps participants recognize how design choices create or remove barriers. Ask them what changed before revealing the comparison.</p></section></div>
+</body>
+</html>
+
+
+
