@@ -12,14 +12,7 @@
   const reviewButton = $('#review-button');
   const finalButton = $('#final-register');
   const formControls = $$('#registration-form .form-grid input, #registration-form .form-grid select');
-  const minimumReviewMs = 301000;
-  let challengeStartedAt = null;
-  let reviewTimer = null;
   let reviewing = false;
-
-  function beginChallenge() {
-    if (challengeStartedAt === null) challengeStartedAt = performance.now();
-  }
 
   function showStage(stage, heading) {
     [dashboard, confirmation, reflection, comparison].forEach((item) => { item.hidden = item !== stage; });
@@ -33,7 +26,6 @@
   }));
 
   $('#details-button').addEventListener('click', (event) => {
-    beginChallenge();
     details.hidden = false;
     event.currentTarget.setAttribute('aria-expanded', 'true');
     details.scrollIntoView({ block: 'start', behavior: 'smooth' });
@@ -81,21 +73,7 @@
     }
     return false;
   }
-  function updateReviewAvailability() {
-    const remaining = Math.max(0, challengeStartedAt + minimumReviewMs - performance.now());
-    finalButton.disabled = remaining > 0;
-    if (remaining > 0) {
-      const seconds = Math.ceil(remaining / 1000);
-      $('#review-timer').textContent = `Final submission available in ${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}.`;
-    } else {
-      $('#review-timer').textContent = 'Final submission is available.';
-      if (reviewTimer !== null) clearInterval(reviewTimer);
-      reviewTimer = null;
-    }
-  }
   function editRegistration() {
-    if (reviewTimer !== null) clearInterval(reviewTimer);
-    reviewTimer = null;
     reviewing = false;
     formControls.forEach((control) => { control.disabled = false; });
     review.hidden = true;
@@ -105,7 +83,6 @@
   registration.addEventListener('submit', (event) => {
     event.preventDefault();
     if (reviewing || !validate()) return;
-    beginChallenge();
     $('#review-name').textContent = $('#full-name').value.trim();
     $('#review-email').textContent = $('#email').value.trim();
     $('#review-participation').textContent = registration.querySelector('input[name="participation"]:checked').value;
@@ -114,26 +91,17 @@
     reviewing = true;
     reviewButton.hidden = true;
     review.hidden = false;
-    updateReviewAvailability();
-    if (finalButton.disabled) reviewTimer = setInterval(updateReviewAvailability, 1000);
     review.scrollIntoView({ block: 'start', behavior: 'smooth' });
   });
   $('#edit-registration').addEventListener('click', editRegistration);
   finalButton.addEventListener('click', () => {
-    if (!reviewing || challengeStartedAt === null || performance.now() < challengeStartedAt + minimumReviewMs) {
-      updateReviewAvailability();
-      return;
-    }
+    if (!reviewing) return;
     if (!validate()) { editRegistration(); return; }
-    if (reviewTimer !== null) clearInterval(reviewTimer);
-    reviewTimer = null;
     registration.reset();
-    challengeStartedAt = null;
     reviewing = false;
     formControls.forEach((control) => { control.disabled = false; });
     review.hidden = true;
     reviewButton.hidden = false;
-    finalButton.disabled = true;
     showStage(confirmation, $('#confirmation-title'));
   });
   if (accessible) {
